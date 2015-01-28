@@ -1,4 +1,4 @@
-function [pts, n] = readPoints(image_in, n)
+function [pts, n] = readPoints_v2(image_in, n)
 %readPoints   Read manually-defined points from image
 %   POINTS = READPOINTS(IMAGE) displays the image in the current figure,
 %   then records the position of each click of button 1 of the mouse in the
