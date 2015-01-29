@@ -1,7 +1,7 @@
 Data Folder : C:\Users\leon\Documents\Data\GeneralData\ConeFields\ 
-File to use : ESP_018747_2065_RED.QLOOK.JP2 
+File to use : PSP_002292_1875_RED.QLOOK.JP2 
 Features to classify : cones 
-Positive Examples : 50 
-Negative Examples : 100 
+Positive Examples : 2 
+Negative Examples : 3 
 Hidden Neurons : 50 
-Minimum image size : 40 
+Minimum image size : 20  40  60 

@@ -1,4 +1,4 @@
-function coord_array = generate_datapoints(hirise_img, y_coord_list, x_coord_list, num_array, size_val)%creates de datapoints
+function coord_array = generate_datapoints(y_coord_list, x_coord_list, num_array, size_val)%creates de datapoints
 %%
 %This creates a NUM_ARRAY set of images from a single click, to generate
 %training data

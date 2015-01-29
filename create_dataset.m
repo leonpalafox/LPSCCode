@@ -30,21 +30,10 @@ end
 coordinates = round(readPoints(hirise_img, n));%First we read the two points for the image
 y_coord = coordinates(1,:); %careful with the orientation
 x_coord = coordinates(2,:);
-data = generate_datapoints(hirise_img, y_coord, x_coord, 4, config.data{7});%creates de datapoints with a given size
 
+name = ['coordinates_',strfilename, '.mat'];
+save(name,'y_coord', 'x_coord') %Here we save only the coordinates, not the windows
 
-%We will generate a file that has all the coordinates of the data sets.
-%structure is 
-%data = [y_coord(1):y_coord(2)
-%        x_coord(1):x_coord(2)]
-
-close all
-%Double check for size consistency
-
-
-name = [feature '_data_'];
-savename = [name, strfilename '.mat'];
-save(savename,'data')
 
 
 
