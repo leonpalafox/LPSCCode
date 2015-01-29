@@ -1,4 +1,4 @@
-function pts = readPoints(image_in, n)
+function pts = readPoints(image_in, max_size, n)
 %readPoints   Read manually-defined points from image
 %   POINTS = READPOINTS(IMAGE) displays the image in the current figure,
 %   then records the position of each click of button 1 of the mouse in the
@@ -14,7 +14,9 @@ else
     pts = zeros(2, n);
 end
 %printf('Hola')
-imshow(image_in, 'InitialMagnification', 100);     % display image
+image_display=image_in(1:max_size(1),1:max_size(2));
+
+imshow(image_display, 'InitialMagnification', 100);     % display image
 xold = 0;
 yold = 0;
 k = 0;

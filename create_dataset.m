@@ -27,7 +27,9 @@ if ~strcmp(feature, 'negative')
 else
     n = config.data{5};
 end
-coordinates = round(readPoints(hirise_img, n));%First we read the two points for the image
+maxim=cell2mat(config.data(7));
+max_size=size(hirise_img)-max(maxim);
+coordinates = round(readPoints_v3(hirise_img, max_size, n));%First we read the two points for the image
 y_coord = coordinates(1,:); %careful with the orientation
 x_coord = coordinates(2,:);
 
