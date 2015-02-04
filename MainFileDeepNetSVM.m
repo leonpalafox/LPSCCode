@@ -12,8 +12,8 @@ config.labels = {'Data Folder', 'File to use', 'Features to classify', 'Positive
 config.data{1} = 'C:\Users\leon\Documents\Data\GeneralData\ConeFields\';
 config.data{2} = 'PSP_002292_1875_RED.QLOOK.JP2';
 config.data{3} = 'cones';
-config.data{4} = 2;%positive examples
-config.data{5} = 3; %negative examples
+config.data{4} = 100;%positive examples
+config.data{5} = 100; %negative examples
 config.data{6} = 50; %hidden neurons
 config.data{7} = [20, 40, 60]; %minimum size
 
