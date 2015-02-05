@@ -27,7 +27,7 @@ for file_idx = 1:file_number
 end
 
 if strcmp(data_file, 'None')
-    coord = [];
+    data = [];
     jp_image = jp_image_org;
     return
 else
@@ -37,15 +37,12 @@ end
 %Now we have a file that has the coordinates
 %is one that has x and y coordinates
 
-num_points =length(y_coord); %get number of points already tagged
+datapoints = size(data,3);
 
-
-for data_idx = 1:num_points
-    upper_y = y_coord(data_idx)-60; %is hardcoded to 60 pixels
-    lower_y = y_coord(data_idx)+60; %is hardcoded to 60 pixels
-    upper_x = x_coord(data_idx)-60; %is hardcoded to 60 pixels
-    lower_x = x_coord(data_idx)+60; %is hardcoded to 60 pixels
-    jp_image(upper_x:lower_x,upper_y:lower_y) = 0;
+for data_idx = 1:datapoints
+    y_coord = data(1,:,data_idx); %careful with the orientation
+    x_coord = data(2,:,data_idx);
+    jp_image(x_coord(1):x_coord(2),y_coord(1):y_coord(2),:) = 0;
 end
 
-coord=[y_coord;x_coord];
+
