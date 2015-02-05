@@ -1,4 +1,4 @@
-function [images, labels] = read_reshape_dataset_labeled(config)
+function [images, labels] = read_reshape_dataset_labeled(config, pixel_size)
 %In this script, we take all the images and make them the same size
 %as wellas we flatten them to input in a classifier
 %%First we load the data matrix
@@ -7,16 +7,23 @@ filename = config.data{2};
 strfilename = strsplit(filename, '.');
 strfilename = strfilename{1};
 %%First we need to find alll of the mat files
-files = dir('*.mat'); %Get all the mat files
+
+%%
+%%Check if the pixel size is within the range
+if ~ismember(pixel_size, config.data{7})
+    error('myApp:argChk', 'The pixel size is not within the range') 
+end
+
+mat_files = dir(['window_size' num2str(pixel_size) '_*_' strfilename '.mat']); %finds all the files that have widnows of the pixel size
 %%
 %Now we concatenate all of the data files in them
 master_data=[];
 master_label = {};
-file_number = size(files,1);
+file_number = size(mat_files,1);
 for file_idx = 1:file_number
-    load(files(file_idx).name)
-    file_feat = strsplit(files(file_idx).name, '_'); %we get the feature of this file
-    file_feat = file_feat(1); 
+    load(mat_files(file_idx).name)
+    file_feat = strsplit(mat_files(file_idx).name, '_'); %we get the feature of this file
+    file_feat = file_feat(3); 
     datap = size(data,3); %get the number of datapoints
     label_file=repmat(file_feat,1,datap);
     master_label = cat(2,master_label, label_file);%concatenate all the labels for this dataset
@@ -28,7 +35,6 @@ end
 %Now we need to load all the the JP2 images
 image_files = dir([folder, '*.png']);
 number_files = size(image_files,1);
-mat_files = dir('*.mat');
 number_mat_files = size(mat_files,1);
 image_array = [];
 master_im_idx = 1;

@@ -13,7 +13,7 @@ config.data{1} = 'C:\Users\leon\Documents\Data\GeneralData\ConeFields\';
 config.data{2} = 'PSP_002292_1875_RED.QLOOK.JP2';
 config.data{3} = 'cones, crater';
 config.data{4} = 100;%positive examples (craters, cones, etc)
-config.data{5} = 10; %negative examples
+config.data{5} = 100; %negative examples
 config.data{6} = 50; %hidden neurons
 config.data{7} = [20, 40, 60]; %minimum size
 
@@ -25,13 +25,15 @@ create_config_file(config, 'config.lpd');% For the moment, the config file
 %crop_working_image(config)
 %break
 %create_dataset('cones', config)
-create_dataset('negative', config)
+%create_dataset('negative', config)
 %create_dataset('crater', config)
+%break
+%generate_windows('cones', config)
+%generate_windows('negative', config)
+%generate_windows('crater', config)
+
+[images, labels] = read_reshape_dataset_labeled(config, 60);
 break
-[images, labels] = read_reshape_dataset_labeled(config);
-c = cvpartition(labels,'k',2); %create two a training and a testing dataset
-test_x = images(c.test(1),:);
-train_x = images(c.training(1),:);
 %run_stacked_autoencoder(images, labels, config)
 %run_autoencoder(zscore(images(1:20,:)), config)
 num_patches = 1000;

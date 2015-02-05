@@ -34,11 +34,12 @@ while 1
           plot(xi, yi, 'go');         % first point on its own
       end
       if isequal(k, n)
+          delete(h);
           break
       end
       xold = xi;
       yold = yi;
-  end
+end
 hold off;
 if k < size(pts,2)
     pts = pts(:, 1:k);

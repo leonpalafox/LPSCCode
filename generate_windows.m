@@ -8,7 +8,7 @@ end
 filename = config.data{2};
 strfilename = strsplit(filename, '.');
 strfilename = strfilename{1};
-load(['coordinates_' strfilename '.mat'])
+load([feature '_coordinates_' strfilename '.mat'])
 windows_size = config.data{7};
 for size_idx = 1:length(windows_size)
     data = generate_datapoints(y_coord, x_coord, 4, windows_size(size_idx));%creates de datapoints with a given size
