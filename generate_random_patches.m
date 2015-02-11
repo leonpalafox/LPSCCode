@@ -11,6 +11,7 @@ filename = [folder filename];
 hirise_img = imread(filename);
 hirise_img = double(hirise_img)/255;
 patch_size = config.data{7}; %Size of each patch
+patch_size = 60; %Size of each patch
 [max_y, max_x] = size(hirise_img);
 upper_x = unidrnd(max_x-patch_size, 1, num_patches);
 upper_y = unidrnd(max_y-patch_size, 1, num_patches);

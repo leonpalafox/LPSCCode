@@ -20,7 +20,7 @@ config.data{8} = [8 8];
 
 %Now that we have all the values, store all of them in an structure and
 %save them in our config file
-%
+%%
 create_config_file(config, 'config.lpd');% For the moment, the config file
 %is only to see in a text file all the variables
 %crop_working_image(config)
@@ -32,7 +32,7 @@ create_config_file(config, 'config.lpd');% For the moment, the config file
 %generate_windows('cones', config)
 %generate_windows('negative', config)
 %generate_windows('crater', config)
-
+%%
 [images, labels, features, image_structure] = read_reshape_dataset_labeled(config, 60);
 break
 %run_stacked_autoencoder(images, labels, config)

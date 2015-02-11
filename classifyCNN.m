@@ -8,10 +8,9 @@ labcnn = zeros(size(num_labels,1),numClasses);
 for class_idx = 1:numClasses
     labcnn(num_labels==class_idx, class_idx)=1;
 end
-trainLabels = labcnn;
-testLabels = labcnn;
-testData = images;
-trainData = images;
+subset = 100;
+[trainLabels, idx] = datasample(labcnn, subset, 'Replace', false);
+trainData = images(idx,:);
 
 train_x = reshape(trainData',input_size,input_size, size(trainData, 1));
 train_y = trainLabels';
@@ -30,10 +29,10 @@ cnn = cnnsetup(cnn, train_x, train_y);
 
 opts.alpha = 1;
 opts.batchsize = 10;
-opts.numepochs = 100;
-opts.plot = 1; 
+opts.numepochs = 10;
+opts.plot = 0; 
 cnn = cnntrain(cnn, train_x, train_y, opts);
-num_patches = 10000;
+num_patches = 1000;
 [patches, upper_x, upper_y] = generate_random_patches(config, num_patches);
 patch = reshape(patches', input_size, input_size, num_patches);
 net = cnnff(cnn, patch);
