@@ -40,5 +40,5 @@ break
 num_patches = 10000;
 [patches, upper_x, upper_y] = generate_random_patches(config, num_patches);
 %classify_patches %This scripts classifies the patches with the autoencoder
-%classify_svm
+classified=classify_svm_v3(image_structure);
 classifyCNN

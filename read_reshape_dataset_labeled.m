@@ -1,4 +1,4 @@
-function [images, labels, features, image_structure] = read_reshape_dataset_labeled(config, pixel_size)
+function [images, labels, feature_array, image_structure] = read_reshape_dataset_labeled(config, pixel_size)
 %In this script, we take all the images and make them the same size
 %as wellas we flatten them to input in a classifier
 %%First we load the data matrix
@@ -6,8 +6,8 @@ folder  = 'Data\';
 filename = config.data{2};
 strfilename = strsplit(filename, '.');
 strfilename = strfilename{1};
-cell_size=config.data{8};
-cell_size=double(cell_size);
+% cell_size=config.data{8};
+% cell_size=double(cell_size);
 
 
 %%First we need to find alll of the mat files
@@ -42,6 +42,10 @@ number_files = size(image_files,1);
 number_mat_files = size(mat_files,1);
 image_array = [];
 master_im_idx = 1;
+feature_array{2}=[];
+feature_array{4}=[];
+feature_array{6}=[];
+feature_array{8}=[];
 for  file_idx= 1:number_files
     strfilename = strsplit(image_files(file_idx).name, '.');
     strfilename = strfilename{1};
@@ -55,11 +59,14 @@ for  file_idx= 1:number_files
             for im_idx = 1:size(data,3)
                 test_img = hirise_img(data(2,1,im_idx):data(2,2,im_idx),data(1,1,im_idx):data(1,2,im_idx),:); %extract the imgaages
                 image_array(:,:,master_im_idx) = test_img;
-                features(1,:,master_im_idx)=extractHOGFeatures(test_img,'CellSize',cell_size);                
+                for cell_size=2:2:8
+                    features(1,:,master_im_idx)={extractHOGFeatures(test_img,'CellSize',[cell_size cell_size])}; 
+                    feature_array{cell_size}=[feature_array{cell_size} features(1,:,master_im_idx)];
+                    clear features
+                end
                 master_im_idx = master_im_idx+1;
             end
         end
-
     end
 end
 data_folder = 'data\';
@@ -68,11 +75,11 @@ samples = num2str(size(master_label,2));
 savename = [data_folder name, samples,'_', strfilename '.mat'];
 save(savename,'image_array')
 savename_feat = [data_folder name, samples, '_', strfilename '.mat'];
-save(savename_feat,'features')
+save(savename_feat,'feature_array')
 [n,m,samples]= size(image_array);
 image_flat = reshape(permute(image_array,[3 2 1]),samples,n*m);
-pcacoeff=pca(image_flat');
-images = image_flat;
-labels = master_label;
-image_structure=struct('Original_Images',images,'HoG_Features',features,'PCA_Coefficients',pcacoeff);
+pcacoeff={pca(image_flat')};
+images = {image_flat};
+labels = {master_label};
+image_structure=struct('Original_Images',images,'HoG_Features_2x2',{feature_array{2}},'HoG_Features_4x4',{feature_array{4}},'HoG_Features_6x6',{feature_array{6}},'HoG_Features_8x8',{feature_array{8}},'PCA_Coefficients',pcacoeff,'Labels',labels);
 end
