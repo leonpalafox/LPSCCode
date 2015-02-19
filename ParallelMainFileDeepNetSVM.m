@@ -3,6 +3,8 @@
 %%This script generates two datasets, one is a dataset with positive
 %%samples of the feature to classify, and another are negative samples.
 %%this is a two class classifier
+%Also, this file uses the matlab functionalities to run in parallel for
+%different window sizes in the trining patters.
 
 %First, we need to call a dialog to generate the settings file
 %TODO generate GUI
@@ -16,7 +18,7 @@ config.data{4} = 100;%positive examples (craters, cones, etc)
 config.data{5} = 100; %negative examples
 config.data{6} = 50; %hidden neurons
 config.data{7} = [20, 40, 60]; %different sizes
-config.data{8} = [8 8];
+config.data{8} = [8 8]; %Cell size for the HOG
 
 %Now that we have all the values, store all of them in an structure and
 %save them in our config file
@@ -40,5 +42,5 @@ break
 num_patches = 10000;
 [patches, upper_x, upper_y] = generate_random_patches(config, num_patches);
 %classify_patches %This scripts classifies the patches with the autoencoder
-classified=classify_svm_v3(image_structure);
+%classify_svm
 classifyCNN
