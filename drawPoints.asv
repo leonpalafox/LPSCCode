@@ -1,6 +1,0 @@
-function drawPoints(image_in, points)
-%%This function draws a circle in the position of each of the points in the
-%%points array
-imshow(image_in)
-
-plot(xi, yi, 'go'); 
