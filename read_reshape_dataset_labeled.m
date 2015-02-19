@@ -79,7 +79,7 @@ save(savename_feat,'feature_array')
 [n,m,samples]= size(image_array);
 image_flat = reshape(permute(image_array,[3 2 1]),samples,n*m);
 pcacoeff={pca(image_flat')};
-images = {image_flat};
-labels = {master_label};
-image_structure=struct('Original_Images',images,'HoG_Features_2x2',{feature_array{2}},'HoG_Features_4x4',{feature_array{4}},'HoG_Features_6x6',{feature_array{6}},'HoG_Features_8x8',{feature_array{8}},'PCA_Coefficients',pcacoeff,'Labels',labels);
+images = image_flat;
+labels = master_label;
+image_structure=struct('Original_Images',{images},'HoG_Features_2x2',{feature_array{2}},'HoG_Features_4x4',{feature_array{4}},'HoG_Features_6x6',{feature_array{6}},'HoG_Features_8x8',{feature_array{8}},'PCA_Coefficients',{pcacoeff},'Labels',{labels});
 end
