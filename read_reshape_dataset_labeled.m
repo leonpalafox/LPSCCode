@@ -1,8 +1,8 @@
 function [images, labels, feature_array, image_structure] = read_reshape_dataset_labeled(config, pixel_size)
 %In this script, we take all the images and make them the same size
-%as wellas we flatten them to input in a classifier
+%as well as we flatten them to input in a classifier
 %%First we load the data matrix
-folder  = 'Data\';
+folder  = '..\Data\';
 filename = config.data{2};
 strfilename = strsplit(filename, '.');
 strfilename = strfilename{1};
@@ -69,7 +69,7 @@ for  file_idx= 1:number_files
         end
     end
 end
-data_folder = 'data\';
+data_folder = '..\Data\';
 name = 'all_images_';
 samples = num2str(size(master_label,2));
 savename = [data_folder name, samples,'_', strfilename '.mat'];

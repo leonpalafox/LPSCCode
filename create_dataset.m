@@ -12,7 +12,7 @@ end
 filename = config.data{2};
 strfilename = strsplit(filename, '.');
 strfilename = strfilename{1};
-folder = 'Data\';
+folder = '..\Data\';
 filename = strcat(strfilename, '.png');
 filename = [folder filename];
 hirise_img = imread(filename);%The reduion level is a reduction level on 2^reduction_level

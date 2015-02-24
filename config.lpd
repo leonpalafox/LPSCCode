@@ -1,7 +1,7 @@
 Data Folder : C:\Users\leon\Documents\Data\GeneralData\ConeFields\ 
 File to use : PSP_002292_1875_RED.QLOOK.JP2 
 Features to classify : cones, crater 
-Positive Examples : 100 
-Negative Examples : 100 
-Hidden Neurons : 50 
+Positive Examples : 20 
+Negative Examples : 20 
+Hidden Neurons : 5 
 Minimum image size : 20  40  60 
