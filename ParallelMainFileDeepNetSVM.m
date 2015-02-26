@@ -14,8 +14,8 @@ config.labels = {'Data Folder', 'File to use', 'Features to classify', 'Positive
 config.data{1} = 'C:\Users\leon\Documents\Data\GeneralData\ConeFields\';
 config.data{2} = 'PSP_002292_1875_RED.QLOOK.JP2';
 config.data{3} = 'cones, crater';
-config.data{4} = 20;%positive examples (craters, cones, etc)
-config.data{5} = 20; %negative examples
+config.data{4} = 50;%positive examples (craters, cones, etc)
+config.data{5} = 100; %negative examples
 config.data{6} = 5; %hidden neurons
 config.data{7} = [20, 40, 60]; %different sizes
 config.data{8} = [8 8]; %Cell size for the HOG
@@ -36,8 +36,16 @@ create_config_file(config, 'config.lpd');% For the moment, the config file
 %generate_windows('crater', config)
 
 %%
-[images, labels, features, image_structure] = read_reshape_dataset_labeled(config, 60);
-image_matrix = create_matrix(config);
-cnn = train_cnn(images, labels); %this retunr a function handler to work with the cnn
-break
-classified_map = run_classification(image_matrix, config, cnn, 60);
+resize_factor = 1;
+cnn_cell = cell(1,2);
+map_cell = cell(1,2);
+for pixel_idx = 1:1
+    [images, labels, features, image_structure] = read_reshape_dataset_labeledv2(config, pixel_idx*20, resize_factor);
+    cnn = train_cnn(images, labels); %this retunr a function handler to work with the cnn
+    cnn_cell{pixel_idx} = cnn;
+    [classified_map, prob_plot] = run_classificationv2(config, cnn_cell{pixel_idx}, pixel_idx*20, resize_factor);
+    map_cell{pixel_idx} = classified_map;
+end
+final_map_cones = map_cell{1}(:,:,1)+map_cell{2}(:,:,1);
+final_map_null = map_cell{1}(:,:,2)+map_cell{2}(:,:,2);
+plot_image(config, final_map_cones, resize_factor);

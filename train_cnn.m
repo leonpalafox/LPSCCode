@@ -9,7 +9,7 @@ labcnn = zeros(size(num_labels,1),numClasses);%This creates the labels int he re
 for class_idx = 1:numClasses
     labcnn(num_labels==class_idx, class_idx)=1;
 end
-subset = 30;
+subset = 600;
 [trainLabels, idx] = datasample(labcnn, subset, 'Replace', false);
 trainData = images(idx,:);
 
@@ -30,7 +30,7 @@ cnn = cnnsetup(cnn, train_x, train_y);
 
 opts.alpha = 1;
 opts.batchsize = 10;
-opts.numepochs = 100;
+opts.numepochs = 200;
 opts.plot = 1; 
 cnn = cnntrain(cnn, train_x, train_y, opts);
 [er, bad] = cnntest(cnn, train_x, train_y)

@@ -3,7 +3,7 @@
 %This script is a test, where you click points in a large image, and check
 %if the mapping works for a smaller image
 
-test_image = imread('Data/PSP_002292_1875_RED.png'); %Load larger image
+test_image = imread('../Data/PSP_002292_1875_RED.png'); %Load larger image
 test_image_small = imresize(test_image, 0.5); %reduce image by half
 %%
 %%Get SURF Features between images
