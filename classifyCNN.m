@@ -1,14 +1,14 @@
 %This function uses the CNN 
 %create label array
-[images, mu, sigma] = zscore(images);
+%[images, mu, sigma] = zscore(images);
 num_labels = grp2idx(labels);
 input_size = size(images,2)^0.5; %check the size of the images
-numClasses=3;
+numClasses=2;
 labcnn = zeros(size(num_labels,1),numClasses);
 for class_idx = 1:numClasses
     labcnn(num_labels==class_idx, class_idx)=1;
 end
-subset = 100;
+subset = 500;
 [trainLabels, idx] = datasample(labcnn, subset, 'Replace', false);
 trainData = images(idx,:);
 
@@ -32,12 +32,14 @@ opts.batchsize = 10;
 opts.numepochs = 10;
 opts.plot = 0; 
 cnn = cnntrain(cnn, train_x, train_y, opts);
-num_patches = 1000;
-[patches, upper_x, upper_y] = generate_random_patches(config, num_patches);
+num_patches = 10000;
+pixel_size = input_size;
+[patches, upper_x, upper_y] = generate_random_patches(config, num_patches, pixel_size);
 patch = reshape(patches', input_size, input_size, num_patches);
 net = cnnff(cnn, patch);
 [~, h] = max(net.o);
 pred = h';
+generate_image(config, upper_x, upper_y, pred, pixel_size)
 %%
 
 

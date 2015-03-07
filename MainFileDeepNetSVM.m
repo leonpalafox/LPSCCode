@@ -33,12 +33,12 @@ create_config_file(config, 'config.lpd');% For the moment, the config file
 %generate_windows('negative', config)
 %generate_windows('crater', config)
 
-[images, labels, features, image_structure] = read_reshape_dataset_labeled(config, 60);
+[images, labels, features, image_structure] = read_reshape_dataset_labeled(config, 40);
 break
 %run_stacked_autoencoder(images, labels, config)
 %run_autoencoder(zscore(images(1:20,:)), config)
-num_patches = 10000;
-[patches, upper_x, upper_y] = generate_random_patches(config, num_patches);
+%num_patches = 10000;
+%[patches, upper_x, upper_y] = generate_random_patches(config, num_patches);
 %classify_patches %This scripts classifies the patches with the autoencoder
-classified=classify_svm_v3(image_structure);
+%classified=classify_svm_v3(image_structure);
 classifyCNN
