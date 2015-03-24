@@ -2,7 +2,7 @@ function image_structure = read_reshape_dataset_labeled(config, pixel_size)
 %In this script, we take all the images and make them the same size
 %as wellas we flatten them to input in a classifier
 %%First we load the data matrix
-folder  = 'Data\';
+folder  = '..\Data\';
 filename = config.data{2};
 strfilename = strsplit(filename, '.');
 strfilename = strfilename{1};
@@ -60,6 +60,7 @@ file_idx=1;
                 image_array = zeros(image_array_rowsize,image_array_colsize,image_array_3dsize);
             end
             for im_idx = 1:size(data,3)
+                
                 test_img = hirise_img(data(2,1,im_idx):data(2,2,im_idx),data(1,1,im_idx):data(1,2,im_idx)); %extract the imgaages
                 image_array(:,:,master_im_idx) = test_img;
                 temp2=extractHOGFeatures(test_img,'CellSize',[2 2]); 

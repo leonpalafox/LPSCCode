@@ -25,15 +25,15 @@ config.data{8} = [8 8]; %Cell size for the HOG
 %
 create_config_file(config, 'config.lpd');% For the moment, the config file
 %is only to see in a text file all the variables
-%crop_working_image(config)
+crop_working_image(config)
 
-create_dataset('cones', config)
-create_dataset('negative', config)
-%create_dataset('crater', config)
+%create_dataset('cones', config)
+%create_dataset('negative', config)
+create_dataset('crater', config)
 %break
-generate_windows('cones', config)
-generate_windows('negative', config)
-%generate_windows('crater', config)
+%generate_windows('cones', config)
+%generate_windows('negative', config)
+generate_windows('crater', config)
 
 %%
 new_class_flag = 1;
@@ -52,7 +52,9 @@ parfor pixel_idx = 1:5
         [classified_map, prob_plot] = run_classificationv2(config, cnn_cell{pixel_idx}, config.data{7}(pixel_idx), resize_factor);
         map_cell{pixel_idx} = classified_map;
 end
-output_map = consolidate_maps(map_cell);
+show_figures_merit(config, cnn_cell, resize_factor);
+output_map = consolidate_maps(map_cell, 1:5);
 plot_learning_rates(learning_plot_cell, config);
 plot_image(config, output_map, resize_factor);
-test_new_image(cnn_cell)
+save('cnn_session.mat', 'cnn_cell', 'learning_plot_cell', 'config', 'map_cell', 'resize_factor')
+test_new_image(cnn_cell, config)
