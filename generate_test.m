@@ -13,4 +13,4 @@ for window_row_idx = 1:step:(size(image_map,1)-ar_size)
         map_idx = map_idx + 1;
     end
 end
-data_map = zscore(data_map);
+%data_map = zscore(data_map);
