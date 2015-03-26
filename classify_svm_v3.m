@@ -3,34 +3,68 @@ function [Accuracy, pred_map, score_map]=classify_svm_v3(image_structure, patche
 %Read in the labels from the structural array and convert them into a list
 %of numbers and corresponding names
 labels=image_structure.Labels;
-[labels_nums, labels_names] = grp2idx(labels);
+[labels_nums, ~] = grp2idx(labels);
 
+%Find how many distinct labels there are
 num_unique_labels=unique(labels_nums);
 
+%Find the field names of the image and patches structure
 field_names=fieldnames(image_structure);
-
 patch_names=fieldnames(patches_structure);
 
+% %Loop over the number of unique lables there are -1 (don't loop over the
+% %negatives)
 % for q=1:size(num_unique_labels)-1
 q=1;
+    %define a working version of the numbers representing the labels to
+    %modify
     num_labels=labels_nums;
+    
+    %Call all labels which don't belong to the current class defined by q
+    %as negative
     num_labels(labels_nums~=num_unique_labels(q))=max(labels_nums);
-
-%     for p=1:size(field_names,1)-1;
-p=1;
-        current_field=cell2mat(field_names(p));
-        images=image_structure.(current_field);
-        images=zscore(images);
+    
+    Result_Array_Size=size(field_names,1)-1;
+    TP=zeros(1,Result_Array_Size*4); TN=zeros(1,Result_Array_Size*4); FP=zeros(1,Result_Array_Size*4); FN=zeros(1,Result_Array_Size*4);
+    Accuracy=zeros(1,Result_Array_Size*4);
+%Loop over the number of field_names in the image strucutre which
+% represents the number of sets of features that can be used -1 (because
+% the last set of "features" in the image structure is the set of labels)
+for r=1:4;
+    for p=1:size(field_names,1)-1;
+        if r==1
+        %descripe the current field name or feature set as described by p
+        %as a matrix
+            current_field_1=cell2mat(field_names(p));
+            patch_field_1=cell2mat(patch_names(p));
+            images=image_structure.(current_field_1);
+            images=zscore(images);
+            pat=patches_structure.(patch_field_1);
+        elseif r==2 || r==3 && r~=p
+            current_field_1=cell2mat(field_names(p));
+            current_field_2=cell2mat(field_names(r));
+            patch_field_1=cell2mat(patch_names(p));
+            patch_field_2=cell2mat(patch_names(r));
+            images=cat(2,image_structure.(current_field_1),image_structure.(current_field_2));
+            images=zscore(images);
+            pat=cat(2,patches_structure.(patch_field_1),patches_structure.(patch_field_2));
+        elseif r==4
+            current_field_1=cell2mat(field_names(1));
+            current_field_2=cell2mat(field_names(2));
+            current_field_3=cell2mat(field_names(3));
+            patch_field_1=cell2mat(patch_names(1));
+            patch_field_2=cell2mat(patch_names(2));            
+            patch_field_3=cell2mat(patch_names(3));
+            images=cat(2,image_structure.(current_field_1),image_structure.(current_field_2),image_structure.(current_field_3));
+            images=zscore(images);
+            pat=cat(2,patches_structure.(patch_field_1),patches_structure.(patch_field_2),patches_structure.(patch_field_3));
+        end
         if iscell(images)==1
             images=cell2mat(images);
         end
-        patch_field=cell2mat(patch_names(p));
-        pat=patches_structure.(patch_field);
         if iscell(pat)==1
             pat=cell2mat(pat);
         end
-            
-           
             
             train_perc=.9;
             subset = train_perc*size(images,1);
@@ -62,7 +96,7 @@ p=1;
 
             %Run through five random starting values for the box constraint and
             %kernel scale (so as not to settle on a local minimum)   
-            m=100;
+            m=1;
 
             %Define fval as an array of zeroes in which the kfold loss values for
             %any z value found will be placed    
@@ -98,31 +132,29 @@ p=1;
                
             %Retrain the SVM with the z values found through the kfoldloss exercise    
             SVMModel_2=fitcsvm(trainData,trainLabels, 'KernelFunction','rbf','Standardize',true, 'BoxConstraint', exp(z(1)), 'KernelScale', exp(z(2)));
-% 
-%             %Train and cross-validate the SVM from above using the partition
-%             %defined in line 73
-%             CVSVM_Model=crossval(SVMModel_2,'CVPartition',partitions);
- 
+%
     %% Predict the results
             [pred_acc,score_acc]=predict(SVMModel_2,testData);
             Pred_acc_mat=[testLabels, pred_acc];
-            TP=0;TN=0;FP=0;FN=0;
+            idx=p*r;
+            TP(idx)=0;TN(idx)=0;FP(idx)=0;FN(idx)=0;
             for i=1:size(Pred_acc_mat,1)
                 if Pred_acc_mat(i,1)==1 && Pred_acc_mat(i,2)==1
-                    TP=TP+1;
+                    TP(idx)=TP(idx)+1;
                 elseif Pred_acc_mat(i,1)==2 && Pred_acc_mat(i,2)==1
-                    FP=FP+1;
+                    FP(idx)=FP(idx)+1;
                 elseif Pred_acc_mat(i,1)==2 && Pred_acc_mat(i,2)==2
-                    TN=TN+1;
+                    TN(idx)=TN(idx)+1;
                 elseif Pred_acc_mat(i,1)==1 && Pred_acc_mat(i,2)==2
-                    FN=FN+1;
+                    FN(idx)=FN(idx)+1;
                 end
             end
             
-            Accuracy=(TP+TN)/(TP+TN+FP+FN);
+            Accuracy(idx)=(TP(idx)+TN(idx))/(TP(idx)+TN(idx)+FP(idx)+FN(idx));
             
             [pred_map,score_map]=predict(SVMModel_2,pat);
 
         %     generate_image(config, upper_x, upper_y, pred')
 
+    end
 end

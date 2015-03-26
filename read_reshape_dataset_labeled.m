@@ -42,7 +42,7 @@ image_files = dir([folder, '*.png']);
 number_files = size(image_files,1);
 number_mat_files = size(mat_files,1);
 master_im_idx = 1;
-
+unique_labels=unique(master_label);
 % for file_idx= 1:number_files
 file_idx=1;
      strfilename = strsplit(image_files(file_idx).name, '.');
@@ -59,13 +59,14 @@ file_idx=1;
                 image_array_3dsize=size(data,3)*number_mat_files*number_files;
                 image_array = zeros(image_array_rowsize,image_array_colsize,image_array_3dsize);
             end
+%             hoglabels(size(data,3)-(number_mat_files-mat_idx)*size(data,3)+1:size(data,3)*mat_idx,1)=unique_labels(mat_idx);
             for im_idx = 1:size(data,3)
                 test_img = hirise_img(data(2,1,im_idx):data(2,2,im_idx),data(1,1,im_idx):data(1,2,im_idx)); %extract the imgaages
                 image_array(:,:,master_im_idx) = test_img;
                 temp2=extractHOGFeatures(test_img,'CellSize',[2 2]); 
                 temp4=extractHOGFeatures(test_img,'CellSize',[4 4]); 
                 temp8=extractHOGFeatures(test_img,'CellSize',[8 8]); 
-                if im_idx==1
+                if im_idx==1 && mat_idx==1
                     features2=zeros(image_array_3dsize,size(temp2,2));
                     features4=zeros(image_array_3dsize,size(temp4,2));
                     features8=zeros(image_array_3dsize,size(temp8,2));
@@ -92,5 +93,6 @@ image_flat = reshape(permute(image_array,[3 2 1]),samples,n*m);
 pcacoeff=pca(image_flat');
 images = image_flat;
 labels = master_label;
-image_structure=struct('Original_Images',{images},'HoG_Features_2x2',features2,'HoG_Features_4x4',features4,'HoG_Features_8x8',features8,'PCA_Coefficients',pcacoeff,'Labels',{labels'});
+image_structure=struct('Original_Images',{images},'HoG_Features_2x2',features2,'Labels',{labels'});
 end
+%'HoG_Features_4x4',features4,'HoG_Features_8x8',features8,'PCA_Coefficients',pcacoeff,
